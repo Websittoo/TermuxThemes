@@ -1,11 +1,11 @@
-mkdir -p ~/.mlgtheme
+# Backup obecnego bashrc
+cp ~/.bashrc ~/.bashrc_backup
 
-# Kopia zapasowa aktualnego .bashrc
-cp ~/.bashrc ~/.mlgtheme/backup.bashrc
-
-# Tworzymy plik z MLG motywem
-cat > ~/.mlgtheme/mlg.bashrc << 'EOM'
+# Nowy pełny MLG bashrc z komendami
+cat > ~/.bashrc << 'EOF'
 clear
+
+# Animacja NOSCOPE
 for frame in ">" ">>" ">>>" ">>>>" ">>>>>" ">>>>>>" "NOSCOPE READY"; do
     echo -ne "\r\e[1;5;33mLoading $frame\e[0m"
     sleep 0.15
@@ -13,6 +13,7 @@ done
 echo ""
 sleep 0.3
 
+# ASCII Banner
 echo -e "\e[1;35m
 ███████╗███╗   ███╗ ██████╗      ███╗   ███╗██╗     ██████╗ 
 ██╔════╝████╗ ████║██╔═══██╗     ████╗ ████║██║     ██╔══██╗
@@ -26,6 +27,7 @@ echo -e "\e[1;36m███████╗\e[1;31m M L G   \e[1;33m N M G \e[1;32
 echo -e "\e[1;5;33m420 NOSCOPE ACTIVATED - FAZE UP\e[0m"
 echo ""
 
+# ASCII DORITOS + DEW
 echo -e "\e[1;32m     (  )  (   ) )"
 echo -e "      ) (   )  (  )"
 echo -e "      ( )  (    ) )         \e[1;31mDORITOS"
@@ -40,41 +42,29 @@ echo -e " \\_____________________/"
 echo ""
 
 echo -e "\e[1;5;35m[+] SYSTEM READY FOR 360 NOSCOPE [+]\e[0m"
-echo -e "\e[1;36mAuthor: TikTok: ApkModerZNJ\e[0m"
+echo -e "\e[1;36mTikTok: ApkModerZNJ\e[0m"
 echo ""
 
-PS1="\e[1;35m[MLG 2016] > \e[0m"
-EOM
-
-# Dodajemy komendy do ~/.bashrc
-cat > ~/.bashrc << 'EOF'
-# === CUSTOM MLG COMMANDS ===
-
+# Custom komenda: mlgHelp
 mlgHelp() {
-    echo -e "\e[1;32m===== MLG COMMANDS =====\e[0m"
-    echo -e "\e[1;33mlgStart\e[0m  - Włącza MLG 2016 Theme"
-    echo -e "\e[1;33m2016End\e[0m   - Przywraca oryginalny wygląd"
-    echo -e "\e[1;33mlgHelp\e[0m    - Pokazuje to menu"
-    echo -e "\e[1;32m=========================\e[0m"
+  echo -e "\e[1;32mAvailable commands:\e[0m"
+  echo -e "\e[1;33mlgHelp\e[0m   - Show this help menu"
+  echo -e "\e[1;33m2016End\e[0m  - Disable MLG theme and restore default"
 }
 
-mlgStart() {
-    cp ~/.mlgtheme/mlg.bashrc ~/.bashrc
-    echo -e "\e[1;32m[+] MLG THEME WŁĄCZONY [+]\e[0m"
-    exec bash
-}
-
+# Komenda: 2016End
 2016End() {
-    cp ~/.mlgtheme/backup.bashrc ~/.bashrc
-    echo -e "\e[1;31m[-] MLG THEME WYŁĄCZONY [-]\e[0m"
-    exec bash
+  if [ -f ~/.bashrc_backup ]; then
+    cp ~/.bashrc_backup ~/.bashrc
+    echo -e "\e[1;31m[-] MLG THEME DISABLED. Restart shell.\e[0m"
+  else
+    echo -e "\e[1;31mNo backup found. Cannot restore.\e[0m"
+  fi
 }
 
-mlgHelp
-
-# Prompt podstawowy
-PS1="\e[0;32m[normalny shell] > \e[0m"
+# Custom prompt
+PS1="\e[1;35m[MLG 2016] > \e[0m"
 EOF
 
-# Reload bashrc to activate help instantly
+# Reload
 source ~/.bashrc
